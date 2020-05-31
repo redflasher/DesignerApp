@@ -7,19 +7,38 @@ import {
     View,
 } from 'react-native';
 
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 import { SwipeListView } from 'react-native-swipe-list-view';
 
 export default function Basic() {
     const [listData, setListData] = useState(
         [
-            { text: `item 1` },
-            { text: `item 1` },
-            { text: `item 1` },
-            { text: `item 1` },
-            { text: `item 1` },
-            { text: `item 1` },
+            { text: `Ключевая информация`,
+                in: [
+                    {text: `Ключевая информация 1`}
+                ]
+                .map((_, i) => ({ key: `${i}`, text: `${_.text}`, in: _.in }))
+            },
+            { text: `Общие вопросы` },
+            { text: `Холл-прихожая` },
+            { text: `Гардеробная для верхней одежды` },
+            { text: `Гардеробная для главной спальни` },
+            { text: `Детская гардеробная` },
+            { text: `Кухня` },
+            { text: `Столовая` },
+            { text: `Гостиная` },
+            { text: `Главная спальня` },
+            { text: `Детская спальня` },
+            { text: `Гостевая спальня` },
+            { text: `Ванная комната` },
+            { text: `Детская ванная` },
+            { text: `Гостевой санузел` },
+            { text: `Постирочная` },
+            { text: `Кабинет` },
         ]
-        .map((_, i) => ({ key: `${i}`, text: `item #${i}` }))
+        .map((_, i) => ({ key: `${i}`, text: `${_.text}`, in: _.in }))
         );
 
     const closeRow = (rowMap, rowKey) => {
@@ -43,12 +62,17 @@ export default function Basic() {
 
     const renderItem = data => (
         <TouchableHighlight
-            onPress={() => console.log('You touched me')}
+            onPress={() => {
+                    // console.log('You touched me 123 ', data, data.item.in);
+                    if(data.item.in) setListData(data.item.in);
+                    // setListData(listData);
+                }
+            }
             style={styles.rowFront}
             underlayColor={'#AAA'}
         >
             <View>
-                <Text>I am {data.item.text} in a SwipeListView</Text>
+                <Text>{data.item.text}</Text>
             </View>
         </TouchableHighlight>
     );
@@ -60,13 +84,13 @@ export default function Basic() {
                 style={[styles.backRightBtn, styles.backRightBtnLeft]}
                 onPress={() => closeRow(rowMap, data.item.key)}
             >
-                <Text style={styles.backTextWhite}>Close</Text>
+                <Text style={styles.backTextWhite}>Ред.</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={[styles.backRightBtn, styles.backRightBtnRight]}
                 onPress={() => deleteRow(rowMap, data.item.key)}
             >
-                <Text style={styles.backTextWhite}>Delete</Text>
+                <Text style={styles.backTextWhite}>Удалить</Text>
             </TouchableOpacity>
         </View>
     );
@@ -79,17 +103,21 @@ export default function Basic() {
                 renderHiddenItem={renderHiddenItem}
                 leftOpenValue={75}
                 rightOpenValue={-150}
-                previewRowKey={'0'}
-                previewOpenValue={-40}
-                previewOpenDelay={3000}
                 onRowDidOpen={onRowDidOpen}
             />
+
+            <ActionButton
+              buttonColor="rgba(231,76,60,1)"
+              onPress={() => { console.log("hi")}}
+            />
+
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
+        top: 20,
         backgroundColor: 'white',
         flex: 1,
     },
@@ -127,5 +155,10 @@ const styles = StyleSheet.create({
     backRightBtnRight: {
         backgroundColor: 'red',
         right: 0,
+    },
+    actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: 'white',
     },
 });
